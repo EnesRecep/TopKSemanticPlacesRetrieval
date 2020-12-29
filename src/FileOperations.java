@@ -11,6 +11,14 @@ public class FileOperations {
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
             while ((line = br.readLine()) != null) {
+
+                /*
+                    Example Data
+                    <id_Uy5EwU3nX1_H?S_otuJrkvKs1>	<Richard_Stallman>	<isLeaderOf>	<Free_Software_Foundation>
+                    Split with TAB
+                    [1] => Subject
+                    [3] => Object
+                 */
                 String[] elements = line.split("\t");
                 if(elements.length == 4){
 
