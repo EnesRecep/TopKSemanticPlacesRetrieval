@@ -1,3 +1,4 @@
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,8 @@ public class Vertex {
                 "ID=" + ID +
                 ", name='" + name + '\'' +
                 ", connectedNodes=" + connectedNodes +
+                ", isPlace=" + isPlace +
+                ", location=" + location +
                 '}';
     }
 }
