@@ -2,6 +2,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
 
@@ -24,7 +25,10 @@ public class Main {
         var result = sp.BSP(vertices, new ArrayList<String>(Arrays.asList("stadion", "krone", "Battle")), new Point(30, 20));
 
 
-        System.out.println(result);
+        for (Map.Entry<Double, Vertex> doubleVertexEntry : result.entrySet()) {
+            System.out.println(doubleVertexEntry);
+        }
+        //System.out.println(result);
         System.out.println("Looseness: " + looseness);
         System.out.println("Total # of Vertex: " + vertices.size());
         System.out.println("Total time (ms): " + (System.currentTimeMillis() - start));

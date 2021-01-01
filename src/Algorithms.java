@@ -35,7 +35,7 @@ public class Algorithms {
                 for (String queryKeyword : queryKeywords) {
                     if (vertices.get(current).name.contains(queryKeyword) || vertices.get(current).name.equals(queryKeyword)) {
                         found.add(queryKeyword);
-                        System.out.println("Keyword: " + queryKeyword + "  Level: " + level.get(current) + "  Vertex: "  + vertices.get(current).name + "   " + vertices.get(current).connectedNodes);
+                        //System.out.println("Keyword: " + queryKeyword + "  Level: " + level.get(current) + "  Vertex: "  + vertices.get(current).name + "   " + vertices.get(current).connectedNodes);
                         looseness += level.get(current);
                     }
                 }
