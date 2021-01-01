@@ -5,7 +5,7 @@ import java.util.Queue;
 
 public class Algorithms {
 
-    public int findLoosenessWithBFS(int placeID, HashMap<Integer, Vertex> vertices, ArrayList<String> queryKeywords, int maxLevel){
+    public static int findLoosenessWithBFS(int placeID, HashMap<Integer, Vertex> vertices, ArrayList<String> queryKeywords, int maxLevel){
         int looseness = 0;
         ArrayList<String> found = new ArrayList<>();
 
@@ -51,5 +51,9 @@ public class Algorithms {
             return Integer.MAX_VALUE;
         }
 
+    }
+
+    public static double euclidianDistance(Vertex v, double x, double y){
+        return Math.sqrt(Math.pow((v.location.x - x), 2) + Math.pow((v.location.y - y), 2));
     }
 }
