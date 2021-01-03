@@ -1,3 +1,10 @@
+import com.github.davidmoten.rtree.Entry;
+import com.github.davidmoten.rtree.RTree;
+import com.github.davidmoten.rtree.geometry.Geometries;
+import com.github.davidmoten.rtree.geometry.Geometry;
+import org.w3c.dom.ls.LSOutput;
+import rx.Observable;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,12 +18,26 @@ public class Main {
         FileOperations f = new FileOperations();
 
 
-        var start = System.currentTimeMillis();
+        RTree<Integer, Geometry> Rtree = RTree.create();
+
+        long start = System.currentTimeMillis();
         vertices = f.readTSVTripletsIntoHashMap(Paths.FACTS_PATH);
         f.SetPlaceInfoOfVertices(vertices, Paths.PLACES2_PATH);
 
+        //tree = tree.add(item, Geometries.point(10,20));
+        for (Map.Entry<Integer, Vertex> vertexEntry : vertices.entrySet()) {
+            Vertex vertex = vertexEntry.getValue();
+            if(vertex.isPlace){
+                Rtree = Rtree.add(vertex.ID, Geometries.point(vertex.location.x,vertex.location.y));
+            }
+        }
+
+        var near =  Rtree.nearest(Geometries.point(39.9, 32.8), 2, 100);
+
+        near.forEach(n -> System.out.println(vertices.get(n.value())));
+
         var temp = vertices.get(vertices.keySet().toArray()[0]);
-        printMapWithLevels(0, 2, temp);
+        //printMapWithLevels(0, 2, temp);
         Algorithms a = new Algorithms();
         var looseness = a.findLoosenessWithBFS(temp.ID, vertices, new ArrayList<String>(Arrays.asList("stadion", "krone", "Battle")), 5);
 
