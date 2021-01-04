@@ -1,3 +1,7 @@
+import com.github.davidmoten.rtree.RTree;
+import com.github.davidmoten.rtree.geometry.Geometries;
+import com.github.davidmoten.rtree.geometry.Geometry;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,13 +10,17 @@ import java.util.TreeMap;
 
 public class SemanticPlace {
 
-    public TreeMap<Double, Vertex> BSP(HashMap<Integer, Vertex> vertices, ArrayList<String> queryKeywords, Point coordinate){
+    public TreeMap<Double, Vertex> BSP(HashMap<Integer, Vertex> vertices, RTree<Integer, Geometry> rtree, ArrayList<String> queryKeywords, Point coordinate){
         TreeMap<Double, Vertex> Hk = new TreeMap<>();
 
         double theta = Double.MAX_VALUE;
 
         /*Temporary looking for 200 vertex, Will be get from R-Tree*/
         for(int i = 0 ;i < 200 ; i++){
+
+            var near =  rtree.nearest(Geometries.point(39.9, 32.8), 2, 100);
+
+            near.forEach(n -> System.out.println(vertices.get(n.value())));
 
             Vertex processing = vertices.get(vertices.keySet().toArray()[i]);
 

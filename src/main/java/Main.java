@@ -43,7 +43,7 @@ public class Main {
 
 
         SemanticPlace sp = new SemanticPlace();
-        var result = sp.BSP(vertices, new ArrayList<String>(Arrays.asList("stadion", "krone", "Battle")), new Point(30, 20));
+        var result = sp.BSP(vertices, Rtree, new ArrayList<String>(Arrays.asList("stadion", "krone", "Battle")), new Point(30, 20));
 
 
         for (Map.Entry<Double, Vertex> doubleVertexEntry : result.entrySet()) {
