@@ -20,7 +20,6 @@ public class Main {
 
         RTree<Integer, Geometry> Rtree = RTree.create();
 
-        long start = System.currentTimeMillis();
         vertices = f.readTSVTripletsIntoHashMap(Paths.FACTS_PATH);
         f.SetPlaceInfoOfVertices(vertices, Paths.PLACES2_PATH);
 
@@ -32,15 +31,14 @@ public class Main {
             }
         }
 
-        var near =  Rtree.nearest(Geometries.point(39.9, 32.8), 2, 100);
-
-        near.forEach(n -> System.out.println(vertices.get(n.value())));
 
         var temp = vertices.get(vertices.keySet().toArray()[0]);
         //printMapWithLevels(0, 2, temp);
         Algorithms a = new Algorithms();
         var looseness = a.findLoosenessWithBFS(temp.ID, vertices, new ArrayList<String>(Arrays.asList("stadion", "krone", "Battle")), 5);
 
+
+        long start = System.currentTimeMillis();
 
         SemanticPlace sp = new SemanticPlace();
         var result = sp.BSP(vertices, Rtree, new ArrayList<String>(Arrays.asList("stadion", "krone", "Battle")), new Point(30, 20));
