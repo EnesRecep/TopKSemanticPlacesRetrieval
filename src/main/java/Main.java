@@ -32,23 +32,23 @@ public class Main {
         }
 
 
-        var temp = vertices.get(vertices.keySet().toArray()[0]);
+        //var temp = vertices.get(vertices.keySet().toArray()[0]);
         //printMapWithLevels(0, 2, temp);
-        Algorithms a = new Algorithms();
-        var looseness = a.findLoosenessWithBFS(temp.ID, vertices, new ArrayList<String>(Arrays.asList("stadion", "krone", "Battle")), 5);
+        //Algorithms a = new Algorithms();
+        //var looseness = a.findLoosenessWithBFS(temp.ID, vertices, new ArrayList<String>(Arrays.asList("stadion", "krone", "Battle")), 5);
 
 
         long start = System.currentTimeMillis();
 
         SemanticPlace sp = new SemanticPlace();
-        var result = sp.BSP(vertices, Rtree, new ArrayList<String>(Arrays.asList("stadion", "krone", "Battle")), new Point(30, 20));
+        var result = sp.BSP(vertices, Rtree, new ArrayList<String>(Arrays.asList("Ankara", "Turkey", "Metro", "University", "Museum")), new Location(39.92, 32.85));
 
 
         for (Map.Entry<Double, Vertex> doubleVertexEntry : result.entrySet()) {
             System.out.println(doubleVertexEntry);
         }
         //System.out.println(result);
-        System.out.println("Looseness: " + looseness);
+        //System.out.println("Looseness: " + looseness);
         System.out.println("Total # of Vertex: " + vertices.size());
         System.out.println("Total time (ms): " + (System.currentTimeMillis() - start));
     }

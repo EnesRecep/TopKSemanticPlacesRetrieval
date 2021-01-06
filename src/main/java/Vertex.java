@@ -1,5 +1,7 @@
 
-import java.awt.*;
+import com.github.davidmoten.rtree.geometry.Geometries;
+import com.github.davidmoten.rtree.geometry.Point;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +10,7 @@ public class Vertex {
     public String name;
     public List<Integer> connectedNodes = new ArrayList<>();
     public boolean isPlace;
-    public Point location = new Point();
+    public Location location = new Location();
 
     public Vertex(int ID, String name) {
         this.ID = ID;

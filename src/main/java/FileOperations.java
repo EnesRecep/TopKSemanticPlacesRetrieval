@@ -60,8 +60,8 @@ public class FileOperations {
 
                     if(vertices.containsKey(loc.hashCode())){
                         vertices.get(loc.hashCode()).isPlace = true;
-                        vertices.get(loc.hashCode()).location.x = (int)Double.parseDouble(x);
-                        vertices.get(loc.hashCode()).location.y = (int)Double.parseDouble(y);;
+                        vertices.get(loc.hashCode()).location.x = Double.parseDouble(x);
+                        vertices.get(loc.hashCode()).location.y = Double.parseDouble(y);;
 
                     }
                 num++;
