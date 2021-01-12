@@ -3,7 +3,6 @@ import com.github.davidmoten.rtree.RTree;
 import com.github.davidmoten.rtree.geometry.Geometries;
 import com.github.davidmoten.rtree.geometry.Geometry;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,12 +29,12 @@ public class SemanticPlace {
 
             Vertex processing = vertices.get(place.value());
 
-            if (/*Algorithms.euclidianDistance(processing, coordinate.x, coordinate.y)*/ Utils.distance(coordinate.x, coordinate.y, processing.location.x, processing.location.y) >= theta && Hk.size() >= 10) {
+            if (/*Algorithms.euclidianDistance(processing, coordinate.x, coordinate.y)*/ getNormalizeDistance(coordinate.x, coordinate.y, processing.location.x, processing.location.y, Constants.MAX_DISTANCE_KM) >= theta && Hk.size() >= 10) {
                 System.out.println("Returned Early");
                 return Hk;
             }
 
-            int looseness = Algorithms.findLoosenessWithBFS(processing.ID, vertices, (ArrayList<String>) queryKeywords.clone(), 5);
+            int looseness = Algorithms.findLoosenessWithBFS(processing.ID, vertices, (ArrayList<String>) queryKeywords.clone(), Constants.MAX_DEEP);
 
             if (looseness == Integer.MAX_VALUE) {
                 //System.out.println(processing);
@@ -44,7 +43,7 @@ public class SemanticPlace {
                 //System.out.println(looseness + "  " + processing);
             }
 
-            double rankingScore = looseness * Utils.distance(coordinate.x, coordinate.y, processing.location.x, processing.location.y) /*Algorithms.euclidianDistance(processing, coordinate.x, coordinate.y)*/;
+            double rankingScore = getNormalizeLooseness(looseness, Constants.MAX_LOOSENESS) * getNormalizeDistance(coordinate.x, coordinate.y, processing.location.x, processing.location.y, Constants.MAX_DISTANCE_KM) /*Algorithms.euclidianDistance(processing, coordinate.x, coordinate.y)*/;
 
             Hk.put(rankingScore, processing);
 
@@ -76,4 +75,11 @@ public class SemanticPlace {
         return target;
     }
 
+    public static double getNormalizeLooseness(int looseness, int maxAllowedLooseness){
+        return Math.min((double)looseness, (double)maxAllowedLooseness) / (double)maxAllowedLooseness;
+    }
+    public static double getNormalizeDistance(double lat1, double lon1, double lat2, double lon2, int maxAllowedDistance){
+        var distance = Utils.distanceInKM(lat1, lon1, lat2, lon2);
+        return Math.min((double)distance, (double)maxAllowedDistance) / (double)maxAllowedDistance;
+    }
 }

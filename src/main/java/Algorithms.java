@@ -23,6 +23,9 @@ public class Algorithms {
             var current = queue.peek();
             queue.remove();
 
+            if(isPrunedByDynamicBound(looseness, level.get(current)))
+                return Integer.MAX_VALUE;
+
             if(marked.containsKey(current) == false) {
                 marked.put(current, true);
 
@@ -33,7 +36,7 @@ public class Algorithms {
                     }
                 }
                 for (String queryKeyword : queryKeywords) {
-                    if (vertices.get(current).name.contains(queryKeyword) || vertices.get(current).name.equals(queryKeyword)) {
+                    if (Utils.containsIgnoreCase(vertices.get(current).name,queryKeyword) || vertices.get(current).name.equals(queryKeyword)) {
                         found.add(queryKeyword);
                         //System.out.println("Keyword: " + queryKeyword + "  Level: " + level.get(current) + "  Vertex: "  + vertices.get(current).name + "   " + vertices.get(current).connectedNodes);
                         looseness += level.get(current);
@@ -55,5 +58,9 @@ public class Algorithms {
 
     public static double euclidianDistance(Vertex v, double x, double y){
         return Math.sqrt(Math.pow((v.location.x - x), 2) + Math.pow((v.location.y - y), 2));
+    }
+
+    public static boolean isPrunedByDynamicBound(int totalLooseness, int currentLevel){
+        return (totalLooseness + currentLevel) > Constants.MAX_LOOSENESS;
     }
 }

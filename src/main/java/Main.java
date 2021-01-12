@@ -41,7 +41,7 @@ public class Main {
         long start = System.currentTimeMillis();
 
         SemanticPlace sp = new SemanticPlace();
-        var result = sp.BSP(vertices, Rtree, new ArrayList<String>(Arrays.asList("Ankara", "Turkey", "Metro", "University", "Museum")), new Location(39.92, 32.85));
+        var result = sp.BSP(vertices, Rtree, new ArrayList<String>(Arrays.asList("Ankara", "Turkey", "University")), new Location(39.92, 32.85));
 
 
         for (Map.Entry<Double, Vertex> doubleVertexEntry : result.entrySet()) {
