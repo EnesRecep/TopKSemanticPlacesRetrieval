@@ -9,13 +9,32 @@ import java.util.Queue;
 
 public class Ideas {
 
-    public HashMap<String, ArrayList<PlaceLoosenessPair>> createWordPlaceMap(){
+    public HashMap<String, ArrayList<PlaceLoosenessPair>> createWordPlaceMap(HashMap<Integer, Vertex> vertices){
 
+        int[] index = {0};
+        HashMap<String, ArrayList<PlaceLoosenessPair>> wordPlaceMap = new HashMap<>();
+        vertices.entrySet().parallelStream().forEach(e -> {
+            if(e.getValue().isPlace) {
+                updateWordPlaceMapWithBFS(e.getKey(), vertices, wordPlaceMap, Constants.MAX_DEEP);
+                index[0] += 1;
+                if(index[0]  % 1000 == 0)
+                    System.out.println(index[0]);
+            }
+
+        });
+//        vertices.forEach((id, v) -> {
+//            if(v.isPlace) {
+//                updateWordPlaceMapWithBFS(id, vertices, wordPlaceMap, Constants.MAX_DEEP);
+//                index[0] += 1;
+//                if(index[0]  % 1000 == 0)
+//                    System.out.println(index[0]);
+//            }
+//        });
+
+        return wordPlaceMap;
     }
 
-    public static int updateWordPlaceMapWithBFS(int placeID, HashMap<Integer, Vertex> vertices, HashMap<String, ArrayList<PlaceLoosenessPair>> wordPlaceMap, int maxLevel){
-        int looseness = 0;
-        ArrayList<String> found = new ArrayList<>();
+    public void updateWordPlaceMapWithBFS(int placeID, HashMap<Integer, Vertex> vertices, HashMap<String, ArrayList<PlaceLoosenessPair>> wordPlaceMap, int maxLevel){
 
         HashMap<Integer, Integer> level = new HashMap<>();
         HashMap<Integer, Boolean> marked = new HashMap<>();
@@ -42,12 +61,14 @@ public class Ideas {
                     }
                 }
 
-                var words = vertices.get(current).name.split(",| |\t|_");
+                var words = vertices.get(current).name.split(",| |\t|_|(|)");
                 for(String word : words){
-                    if(wordPlaceMap.containsKey(word) == false){
-                        wordPlaceMap.put(word, new ArrayList<>());
+                    if(word.length() > 2) {
+                        if (wordPlaceMap.containsKey(word.toLowerCase()) == false) {
+                            wordPlaceMap.put(word.toLowerCase(), new ArrayList<>());
+                        }
+                        wordPlaceMap.get(word.toLowerCase()).add(new PlaceLoosenessPair(current, level.get(current)));
                     }
-                    //Update map
                 }
 
             }

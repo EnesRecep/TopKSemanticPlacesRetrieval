@@ -17,12 +17,19 @@ public class Main {
     public Main() {
         FileOperations f = new FileOperations();
 
+        long start = System.currentTimeMillis();
 
         RTree<Integer, Geometry> Rtree = RTree.create();
 
         vertices = f.readTSVTripletsIntoHashMap(Paths.FACTS_PATH);
         f.SetPlaceInfoOfVertices(vertices, Paths.PLACES2_PATH);
 
+        long mapCreationInit = System.currentTimeMillis();
+
+        Ideas ideas = new Ideas();
+        var result = ideas.createWordPlaceMap(vertices);
+
+        /*
         //tree = tree.add(item, Geometries.point(10,20));
         for (Map.Entry<Integer, Vertex> vertexEntry : vertices.entrySet()) {
             Vertex vertex = vertexEntry.getValue();
@@ -47,9 +54,13 @@ public class Main {
         for (Map.Entry<Double, Vertex> doubleVertexEntry : result.entrySet()) {
             System.out.println(doubleVertexEntry);
         }
+
+
+         */
         //System.out.println(result);
         //System.out.println("Looseness: " + looseness);
         System.out.println("Total # of Vertex: " + vertices.size());
+        System.out.println("Total time for creating map (ms): " + (System.currentTimeMillis() - mapCreationInit));
         System.out.println("Total time (ms): " + (System.currentTimeMillis() - start));
     }
 
