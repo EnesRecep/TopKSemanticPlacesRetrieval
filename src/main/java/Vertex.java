@@ -2,10 +2,11 @@
 import com.github.davidmoten.rtree.geometry.Geometries;
 import com.github.davidmoten.rtree.geometry.Point;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Vertex {
+public class Vertex implements Serializable {
     public int ID;
     public String name;
     public List<Integer> connectedNodes = new ArrayList<>();
@@ -15,6 +16,9 @@ public class Vertex {
     public Vertex(int ID, String name) {
         this.ID = ID;
         this.name = name;
+    }
+
+    public Vertex() {
     }
 
     @Override

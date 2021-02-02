@@ -1,24 +1,29 @@
 
 
 import Model.PlaceLoosenessPair;
+import Model.WordLoosenessPair;
+import com.github.davidmoten.rtree.internal.util.Pair;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class Ideas {
 
-    public HashMap<String, ArrayList<PlaceLoosenessPair>> createWordPlaceMap(HashMap<Integer, Vertex> vertices){
-
+    public HashMap<String, HashSet<PlaceLoosenessPair>> createWordPlaceMap(HashMap<Integer, Vertex> vertices) {
+        HashMap<String, HashSet<PlaceLoosenessPair>> wordPlaceMap = new HashMap<>();
         int[] index = {0};
-        HashMap<String, ArrayList<PlaceLoosenessPair>> wordPlaceMap = new HashMap<>();
+
         vertices.entrySet().parallelStream().forEach(e -> {
-            if(e.getValue().isPlace) {
-                updateWordPlaceMapWithBFS(e.getKey(), vertices, wordPlaceMap, Constants.MAX_DEEP);
-                index[0] += 1;
-                if(index[0]  % 1000 == 0)
-                    System.out.println(index[0]);
+            try {
+                if (e.getValue().isPlace) {
+                    updateWordPlaceMapWithBFS(e.getKey(), vertices, wordPlaceMap, Constants.MAX_DEEP);
+                    index[0] += 1;
+                    if (index[0] % 1000 == 0) {
+                        System.out.println(index[0]);
+                        System.out.println(wordPlaceMap.size());
+                    }
+                }
+            } catch (Exception ex) {
+                System.out.println(ex.toString());
             }
 
         });
@@ -26,15 +31,17 @@ public class Ideas {
 //            if(v.isPlace) {
 //                updateWordPlaceMapWithBFS(id, vertices, wordPlaceMap, Constants.MAX_DEEP);
 //                index[0] += 1;
-//                if(index[0]  % 1000 == 0)
+//                if(index[0]  % 1000 == 0) {
 //                    System.out.println(index[0]);
+//                    System.out.println(wordPlaceMap.size());
+//                }
 //            }
 //        });
 
         return wordPlaceMap;
     }
 
-    public void updateWordPlaceMapWithBFS(int placeID, HashMap<Integer, Vertex> vertices, HashMap<String, ArrayList<PlaceLoosenessPair>> wordPlaceMap, int maxLevel){
+    public void updateWordPlaceMapWithBFS(int placeID, HashMap<Integer, Vertex> vertices, HashMap<String, HashSet<PlaceLoosenessPair>> wordPlaceMap, int maxLevel) {
 
         HashMap<Integer, Integer> level = new HashMap<>();
         HashMap<Integer, Boolean> marked = new HashMap<>();
@@ -45,31 +52,109 @@ public class Ideas {
 
         level.put(placeID, 0);
 
-        while(queue.size()  > 0){
+        while (queue.size() > 0) {
 
             var current = queue.peek();
             queue.remove();
 
 
-            if(marked.containsKey(current) == false) {
+            if (marked.containsKey(current) == false) {
                 marked.put(current, true);
 
-                if(level.get(current) < maxLevel) {
+                if (level.get(current) < maxLevel) {
                     for (Integer connectedNode : vertices.get(current).connectedNodes) {
                         queue.add(connectedNode);
                         level.put(connectedNode, level.get(current) + 1);
                     }
                 }
 
-                var words = vertices.get(current).name.split(",| |\t|_|(|)");
-                for(String word : words){
-                    if(word.length() > 2) {
+                var words = vertices.get(current).name.split(",|\\s+|_|/(|/)");
+                for (String word : words) {
+                    if (word.length() > 2/* && word.toLowerCase().startsWith("a")*/) {
                         if (wordPlaceMap.containsKey(word.toLowerCase()) == false) {
-                            wordPlaceMap.put(word.toLowerCase(), new ArrayList<>());
+                            wordPlaceMap.put(word.toLowerCase(), new HashSet<>());
                         }
-                        wordPlaceMap.get(word.toLowerCase()).add(new PlaceLoosenessPair(current, level.get(current)));
+
+                        if (!wordPlaceMap.get(word.toLowerCase()).contains(new PlaceLoosenessPair(current, level.get(current)))) {
+                            wordPlaceMap.get(word.toLowerCase()).add(new PlaceLoosenessPair(current, level.get(current)));
+                        }
                     }
                 }
+
+            }
+        }
+
+        //vertices.get(placeID).connectedNodes.clear();
+        //vertices.remove(placeID);
+    }
+
+    public void createPlaceWordMap(HashMap<Integer, Vertex> vertices) {
+        int[] index = {0};
+
+        HashMap<Integer, ArrayList<WordLoosenessPair>> wordPlaceMap = new HashMap<>();
+        vertices.entrySet().forEach(e -> {
+            if (e.getValue().isPlace) {
+                updatePlaceWordMapWithBFS(e.getKey(), vertices, wordPlaceMap, Constants.MAX_DEEP);
+                index[0] += 1;
+                if (index[0] % 10000 == 0) {
+                    Utils.writeHashMap(wordPlaceMap, "PWM_" + Constants.MAX_DEEP + "_" + index[0]);
+                    wordPlaceMap.clear();
+                    System.out.println(index[0]);
+                    System.gc();
+                }
+            }
+
+        });
+
+        //return wordPlaceMap;
+    }
+
+    public void updatePlaceWordMapWithBFS(int placeID, HashMap<Integer, Vertex> vertices, HashMap<Integer, ArrayList<WordLoosenessPair>> placeWordMap, int maxLevel) {
+
+        HashMap<Integer, Integer> level = new HashMap<>();
+        HashMap<Integer, Boolean> marked = new HashMap<>();
+
+        Queue<Integer> queue = new LinkedList<Integer>();
+
+        queue.add(placeID);
+
+        level.put(placeID, 0);
+
+        while (queue.size() > 0) {
+
+            var current = queue.peek();
+            queue.remove();
+
+
+            if (marked.containsKey(current) == false) {
+                marked.put(current, true);
+                if (placeWordMap.containsKey(current) == false) {
+                    placeWordMap.put(current, new ArrayList<>());
+                }
+
+                if (level.get(current) < maxLevel) {
+                    for (Integer connectedNode : vertices.get(current).connectedNodes) {
+                        if (placeWordMap.containsKey(connectedNode)) {
+                            var temp = placeWordMap.get(connectedNode);
+                            for (WordLoosenessPair wordLoosenessPair : temp) {
+                                placeWordMap.get(current).add(new WordLoosenessPair(wordLoosenessPair.word, wordLoosenessPair.looseness + level.get(current)));
+                            }
+                        } else {
+                            queue.add(connectedNode);
+                            level.put(connectedNode, level.get(current) + 1);
+                        }
+
+
+                    }
+                }
+                var words = vertices.get(current).name.split(",|\\s+|_|/(|/)");
+                for (String word : words) {
+                    if (word.length() > 2 /*&& word.toLowerCase().startsWith("a")*/) {
+
+                        placeWordMap.get(current).add(new WordLoosenessPair(word.toLowerCase(), level.get(current)));
+                    }
+                }
+
 
             }
         }

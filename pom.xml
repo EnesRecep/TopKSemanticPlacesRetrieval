@@ -16,6 +16,23 @@
             <version>0.8.7</version>
         </dependency>
 
+        <dependency>
+            <groupId>de.ruedigermoeller</groupId>
+            <artifactId>fst</artifactId>
+            <version>2.56</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.esotericsoftware</groupId>
+            <artifactId>kryo</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+        <!-- for usage in a library that should be published: -->
+        <dependency>
+            <groupId>com.esotericsoftware.kryo</groupId>
+            <artifactId>kryo5</artifactId>
+            <version>RELEASE</version>
+        </dependency>
     </dependencies>
     
 </project>
