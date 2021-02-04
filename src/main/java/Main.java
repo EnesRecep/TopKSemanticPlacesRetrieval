@@ -27,9 +27,12 @@ public class Main {
 
         RTree<Integer, Geometry> Rtree = RTree.create();
 
-        //vertices = f.readTSVTripletsIntoHashMap(Paths.FACTS_PATH);
-        //f.SetPlaceInfoOfVertices(vertices, Paths.PLACES2_PATH);
-        //Utils.writeHashMap(vertices, "vertices");
+//        vertices = f.readTSVTripletsIntoHashMap(Paths.FACTS_PATH);
+//        f.SetPlaceInfoOfVertices(vertices, Paths.PLACES2_PATH);
+//        Utils.writeHashMap(vertices, "vertices");
+//
+//        if(1 == 1)
+//            return;
         //vertices.clear();
         vertices = (HashMap<Integer, Vertex>)Utils.readHashMap("vertices");
 /*

@@ -97,9 +97,19 @@ public class Ideas {
                 updatePlaceWordMapWithBFS(e.getKey(), vertices, wordPlaceMap, Constants.MAX_DEEP);
                 index[0] += 1;
                 if (index[0] % 10000 == 0) {
-                    Utils.writeHashMap(wordPlaceMap, "PWM_" + Constants.MAX_DEEP + "_" + index[0]);
+                    Utils.writeHashMap(wordPlaceMap, "PWM_5\\PWM_" + Constants.MAX_DEEP + "_" + index[0]);
                     wordPlaceMap.clear();
                     System.out.println(index[0]);
+                    // Get current size of heap in bytes
+                    long heapSize = Runtime.getRuntime().totalMemory() / (1024 * 1024);
+
+// Get maximum size of heap in bytes. The heap cannot grow beyond this size.// Any attempt will result in an OutOfMemoryException.
+                    long heapMaxSize = Runtime.getRuntime().maxMemory() / (1024 * 1024);
+
+                    // Get amount of free memory within the heap in bytes. This size will increase // after garbage collection and decrease as new objects are created.
+                    long heapFreeSize = Runtime.getRuntime().freeMemory() / (1024 * 1024);
+
+                    System.out.println(heapSize + " / " + heapMaxSize);
                     System.gc();
                 }
             }
