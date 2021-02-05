@@ -12,7 +12,9 @@ public class Ideas {
         HashMap<String, HashSet<PlaceLoosenessPair>> wordPlaceMap = new HashMap<>();
         int[] index = {0};
 
-        vertices.entrySet().parallelStream().forEach(e -> {
+        Iterator<Map.Entry<Integer, Vertex>> itr = vertices.entrySet().iterator();
+        while(itr.hasNext()){
+            Map.Entry<Integer, Vertex> e = itr.next();
             try {
                 if (e.getValue().isPlace) {
                     updateWordPlaceMapWithBFS(e.getKey(), vertices, wordPlaceMap, Constants.MAX_DEEP);
@@ -21,12 +23,28 @@ public class Ideas {
                         System.out.println(index[0]);
                         System.out.println(wordPlaceMap.size());
                     }
+
+                    vertices.remove(e.getKey());
                 }
             } catch (Exception ex) {
                 System.out.println(ex.toString());
             }
-
-        });
+        }
+//        vertices.entrySet().parallelStream().forEach(e -> {
+//            try {
+//                if (e.getValue().isPlace) {
+//                    updateWordPlaceMapWithBFS(e.getKey(), vertices, wordPlaceMap, Constants.MAX_DEEP);
+//                    index[0] += 1;
+//                    if (index[0] % 1000 == 0) {
+//                        System.out.println(index[0]);
+//                        System.out.println(wordPlaceMap.size());
+//                    }
+//                }
+//            } catch (Exception ex) {
+//                System.out.println(ex.toString());
+//            }
+//
+//        });
 //        vertices.forEach((id, v) -> {
 //            if(v.isPlace) {
 //                updateWordPlaceMapWithBFS(id, vertices, wordPlaceMap, Constants.MAX_DEEP);
