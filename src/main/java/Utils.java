@@ -78,6 +78,7 @@ public class Utils {
         kryo.register(PlaceLoosenessPair.class);
         kryo.register(WordLoosenessPair.class);
         kryo.register(HashSet.class);
+        kryo.register(java.util.TreeSet.class);
 
 
         Output output = null;
@@ -101,6 +102,7 @@ public class Utils {
         kryo.register(PlaceLoosenessPair.class);
         kryo.register(WordLoosenessPair.class);
         kryo.register(HashSet.class);
+        kryo.register(java.util.TreeSet.class);
 
 
         Input input = null;

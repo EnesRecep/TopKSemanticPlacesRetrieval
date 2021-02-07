@@ -27,6 +27,11 @@ public class Main {
 
         RTree<Integer, Geometry> Rtree = RTree.create();
 
+//        var m = Utils.readHashMap("PWM_55\\PWM_5_1450000");
+//        m.forEach((k,v) -> System.out.println(k + "  ->  " + v));
+//        if(1 == 1)
+//            return;
+
 //        vertices = f.readTSVTripletsIntoHashMap(Paths.FACTS_PATH);
 //        f.SetPlaceInfoOfVertices(vertices, Paths.PLACES2_PATH);
 //        Utils.writeHashMap(vertices, "vertices");
@@ -37,8 +42,8 @@ public class Main {
         vertices = (HashMap<Integer, Vertex>)Utils.readHashMap("vertices");
 /*
         long writeStart = System.currentTimeMillis();
-
         try {
+
             Utils.WriteMap(new FileOutputStream(new File("map.txt")), vertices);
         } catch (IOException e) {
             e.printStackTrace();
